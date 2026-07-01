@@ -1,6 +1,6 @@
 import { eq, and, lt, sql } from 'drizzle-orm'
 import type { AppDb } from '../db'
-import { fabrics, type Fabric, type NewFabric } from '../db/schema'
+import { fabrics, jobFabricLinks, type Fabric, type NewFabric } from '../db/schema'
 import { NotFoundError } from '../utils/errors'
 
 export class FabricRepository {
@@ -95,6 +95,10 @@ export class FabricRepository {
         updatedAt: new Date().toISOString(),
       })
       .where(and(eq(fabrics.id, id), eq(fabrics.tenantId, tenantId)))
+  }
+
+  async removeJobLinks(id: string): Promise<void> {
+    await this.db.delete(jobFabricLinks).where(eq(jobFabricLinks.fabricId, id))
   }
 
   async delete(id: string, tenantId: string): Promise<void> {

@@ -69,6 +69,7 @@ export class FabricService {
 
   async delete(id: string, tenantId: string): Promise<void> {
     await this.fabricRepo.findByIdOrThrow(id, tenantId)
+    await this.fabricRepo.removeJobLinks(id)
     await this.fabricRepo.delete(id, tenantId)
   }
 }
